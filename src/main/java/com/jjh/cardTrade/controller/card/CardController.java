@@ -19,12 +19,7 @@ public class CardController {
 
     @PostMapping("/card")
     public CardResponse saveCard(@RequestBody CardRequest request) {
-        String resultCd = cardService.saveCard(request);
-        CardResponse response = new CardResponse();
-        if (resultCd == "success") {
-            Card card = cardService.getCard(request);
-            response.setCardRefId(card.getCardRefId());
-        }
+        CardResponse response = cardService.saveCard(request);
         return response;
     }
 }

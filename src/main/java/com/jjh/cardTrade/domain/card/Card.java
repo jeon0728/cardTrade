@@ -11,30 +11,28 @@ import java.time.format.DateTimeFormatter;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
+@IdClass(CardPk.class)
 public class Card {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "card_ref_id")
-    private Long cardRefId;
-    @Column(nullable = false)
+    private String cardRefId;
+    @Id
+    @Column(name = "user_key")
     private String userKey;
-
-    @Column(nullable = false)
+    @Id
+    @Column(name = "card_no")
     private String cardNo;
-
-    @Column(nullable = false)
-    private String cardNoEnc;
 
     @Column(nullable = false)
     private String cardUser;
 
-    public Card(String userKey, String cardNo, String cardNoEnc, String cardUser) {
+    public Card(String cardRefId, String userKey, String cardNo, String cardUser) {
+        this.cardRefId = cardRefId;
         this.userKey = userKey;
         this.cardNo = cardNo;
-        this.cardNoEnc = cardNoEnc;
         this.cardUser = cardUser;
     }
 

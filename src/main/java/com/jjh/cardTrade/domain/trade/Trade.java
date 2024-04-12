@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
@@ -21,19 +22,21 @@ public class Trade {
     private String tradeMoney;
 
     @Column(nullable = false)
-    private LocalDate tradeDate;
+    private String tradeDate;
 
     @ManyToOne
     @JoinColumn(name = "card_ref_id")
+    @JoinColumn(name = "user_key")
+    @JoinColumn(name = "card_no")
     private Card card;
 
-    public Trade(String tradeMoney, LocalDate tradeDate, Card card) {
+    public Trade(String tradeMoney, String tradeDate, Card card) {
         this.tradeMoney = tradeMoney;
         this.tradeDate = tradeDate;
         this.card = card;
     }
 
-    private String formatDate() {
-        return tradeDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-    }
+    //private String formatDate() {
+    //    return tradeDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    //}
 }

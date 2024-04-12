@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -47,9 +49,9 @@ public class TradeService {
         }
 
         try {
-            Card card = cardRepository.findById(Long.parseLong(request.getCardRefId())).orElseThrow(() -> new RuntimeException("등록된 카드 정보가 없습니다."));
+            Card card = cardRepository.findByCardRefId(request.getCardRefId());
 
-            Trade newTrade = new Trade(request.getTradeMoney(), LocalDate.now(), card);
+            Trade newTrade = new Trade(request.getTradeMoney(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()), card);
             tradeRepository.save(newTrade);
         } catch (Exception e) {
             resultCd = "error";

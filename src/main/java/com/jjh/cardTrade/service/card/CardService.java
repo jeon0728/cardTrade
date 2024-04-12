@@ -2,6 +2,7 @@ package com.jjh.cardTrade.service.card;
 
 import com.jjh.cardTrade.domain.card.Card;
 import com.jjh.cardTrade.dto.card.request.CardRequest;
+import com.jjh.cardTrade.dto.card.response.CardResponse;
 import com.jjh.cardTrade.repository.card.CardRepository;
 import com.jjh.cardTrade.utils.crypto.CryptoUtil;
 import org.springframework.stereotype.Service;
@@ -28,31 +29,48 @@ public class CardService {
         return card;
     }
 
-    public Optional<Card> getCardById(Long cardRefId) {
-        Optional<Card> card = cardRepository.findById(cardRefId);
+    public Card getCardById(String cardRefId) {
+        Card card = cardRepository.findByCardRefId(cardRefId);
         return card;
     }
 
     @Transactional
-    public String saveCard(CardRequest request) {
+    public CardResponse saveCard(CardRequest request) {
         String resultCd = "success";
-        if (cardRepository.findByCardNo(request.getCardNo()) != null) {
-            throw new IllegalArgumentException("이미 등록되어 있는 카드 정보입니다.");
-        }
+        String resultMsg = "카드 등록이 성공하였습니다.";
+        String cardRefId = "";
+        CardResponse response = new CardResponse();
 
         try {
-            SecretKey key = CryptoUtil.getKey();
-            IvParameterSpec ivParameterSpec = CryptoUtil.getIv();
-            String specName = "AES/CBC/PKCS5Padding";
-            String cardNoEnc = CryptoUtil.encrypt(specName, key, ivParameterSpec, request.getCardNo());
+            if (cardRepository.findByCardNo(request.getCardNo()) != null) {
+                resultCd = "error";
+                resultMsg = "이미 등록되어 있는 카드 정보입니다.";
+                Card card = getCard(request);
+                cardRefId = card.getCardRefId();
+            } else {
+                SecretKey key = CryptoUtil.getKey();
+                IvParameterSpec ivParameterSpec = CryptoUtil.getIv();
+                String specName = "AES/CBC/PKCS5Padding";
+                String cardNoEnc = CryptoUtil.encrypt(specName, key, ivParameterSpec, request.getCardNo());
 
-            Card newCard = new Card(request.getUserKey(), request.getCardNo(), cardNoEnc, request.getCardUser());
-            cardRepository.save(newCard);
+                Card newCard = new Card(cardNoEnc, request.getUserKey(), request.getCardNo(), request.getCardUser());
+                cardRepository.save(newCard);
+            }
         } catch (Exception e) {
             resultCd = "error";
+            resultMsg = "카드 등록이 실패하였습니다.";
             e.printStackTrace();
         } finally {
-            return resultCd;
+            if (resultCd == "success") {
+                Card card = getCard(request);
+                cardRefId = card.getCardRefId();
+            }
+
+            response.setCardRefId(cardRefId);
+            response.setResultCd(resultCd);
+            response.setResultMsg(resultMsg);
+
+            return response;
         }
 
     }

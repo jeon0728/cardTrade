@@ -25,12 +25,12 @@ public class TradeController {
         this.tradeService = tradeService;
     }
 
-    @GetMapping("/toekn/{cardRefId}")
-    public TokenResponse createToken(@PathVariable("cardRefId") String cardRefId) throws Exception {
-        if (cardService.getCardById(Long.parseLong(cardRefId)) == null) {
+    @PostMapping("/token")
+    public TokenResponse createToken(@RequestBody TradeRequest request) throws Exception {
+        if (cardService.getCardById(request.getCardRefId()) == null) {
             throw new IllegalArgumentException("등록되어 있지 않은 카드 정보입니다.");
         }
-        String token = jwtProvider.createToken(cardRefId); // 토큰 생성
+        String token = jwtProvider.createToken(request.getCardRefId()); // 토큰 생성
         Claims claims = jwtProvider.parseJwtToken("Bearer "+ token); // 토큰 검증
 
         TokenResponse tokenResponse = new TokenResponse("200", "OK", token);
@@ -41,7 +41,7 @@ public class TradeController {
     @PostMapping("/trade")
     public TradeResponse trade(@RequestHeader(value = "Authorization") String token, @RequestBody TradeRequest request) {
         String resultCd = tradeService.saveTradeInfo(request, token);
-        Card card = cardService.getCardById(Long.parseLong(request.getCardRefId())).orElseThrow(() -> new RuntimeException("등록된 카드 정보가 없습니다."));
+        Card card = cardService.getCardById(request.getCardRefId());
         TradeResponse response = new TradeResponse(card, resultCd);
         return response;
     }
