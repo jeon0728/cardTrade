@@ -18,7 +18,7 @@ public class SwaggerConfig {
     private Info apiInfo() {
         return new Info()
                 .title("cardTrade")
-                .description("토근기반 결제 시스템 API 명세서")
+                .description("토큰기반 결제 시스템 API 명세서")
                 .version("1.0.0");
     }
 }
