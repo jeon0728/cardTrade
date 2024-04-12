@@ -18,7 +18,7 @@ public class IndexController {
         this.tradeService = tradeService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/trade/list")
     public String index(Model model) {
         model.addAttribute("trade", tradeService.getTradeAll());
         return "trade";

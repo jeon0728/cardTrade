@@ -9,8 +9,11 @@ import com.jjh.cardTrade.dto.trade.response.TradeResponse;
 import com.jjh.cardTrade.service.card.CardService;
 import com.jjh.cardTrade.service.trade.TradeService;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
-
+@Tag(name = "결제 관련 API", description = "토큰 발급, 결제 프로세스")
 @RestController
 public class TradeController {
 
@@ -26,6 +29,8 @@ public class TradeController {
     }
 
     @PostMapping("/token")
+    @Operation(summary = "토큰 발급", description = "REF_ID를 이용하여 결제시 사용 할 토큰을 발급합니다.")
+    @Parameter(name = "cardRefId", description = "카드 참조값")
     public TokenResponse createToken(@RequestBody TradeRequest request) throws Exception {
         if (cardService.getCardById(request.getCardRefId()) == null) {
             throw new IllegalArgumentException("등록되어 있지 않은 카드 정보입니다.");
@@ -39,6 +44,9 @@ public class TradeController {
     }
 
     @PostMapping("/trade")
+    @Operation(summary = "결제 프로세스", description = "발급 받은 토큰을 이용하여 결제를 진행")
+    @Parameter(name = "tradeMoney", description = "결제 금액")
+    @Parameter(name = "cardRefId", description = "카드 참조값")
     public TradeResponse trade(@RequestHeader(value = "Authorization") String token, @RequestBody TradeRequest request) {
         String resultCd = tradeService.saveTradeInfo(request, token);
         Card card = cardService.getCardById(request.getCardRefId());

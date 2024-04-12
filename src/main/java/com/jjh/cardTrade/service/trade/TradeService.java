@@ -7,6 +7,7 @@ import com.jjh.cardTrade.dto.trade.request.TradeRequest;
 import com.jjh.cardTrade.repository.card.CardRepository;
 import com.jjh.cardTrade.repository.trade.TradeRepository;
 import io.jsonwebtoken.Claims;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,7 @@ public class TradeService {
     }
 
     public List<Trade> getTradeAll() {
-        List<Trade> tradeList = tradeRepository.findAll();
+        List<Trade> tradeList = tradeRepository.findAll(Sort.by(Sort.Direction.DESC, "tradeDate"));
         return tradeList;
     }
 

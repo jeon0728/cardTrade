@@ -1,17 +1,20 @@
 {{>header}}
-<h1>토큰기반 결제 시스템</h1>
+<h1>토큰기반 결제 시스템 조회</h1>
 <div class="col-md-12">
-    <div class="row">
-        <div class="col-md-6">
-            <a href="/post/save" role="button" class="btn btn-primary">글 등록</a>
-        </div>
-    </div>
-    <br>
 
     <!-- 목록 출력 영역 추가 -->
-    <table class="table table-horizontal table-bordered">
+    <table class="table table-horizontal table-bordered" border="1">
+        <colgroup>
+            <col width="25%" />
+            <col width="14%" />
+            <col width="18%" />
+            <col width="18%" />
+            <col width="25%" />
+        </colgroup>
         <thead class="thead-strong">
-        <tr>
+        <tr style="background-color: skyblue;">
+            <th>카드 번호</th>
+            <th>카드 명의자</th>
             <th>거래 번호</th>
             <th>거래 금액</th>
             <th>거래 일자</th>
@@ -20,9 +23,11 @@
         <tbody id="tbody">
         {{#trade}}
             <tr>
-                <td>{{tradeNo}}</td>
-                <td>{{tradeMoney}}</a></td>
-                <td>{{tradeDate}}</td>
+                <td style="text-align: right;">{{card.cardNo}}</td>
+                <td style="text-align: center;">{{card.cardUser}}</td>
+                <td style="text-align: right;">{{tradeNo}}</td>
+                <td style="text-align: right;">{{tradeMoney}}</a></td>
+                <td style="text-align: center;">{{tradeDate}}</td>
             </tr>
         {{/trade}}
         </tbody>
