@@ -3,12 +3,6 @@ package com.jjh.cardTrade.domain.card;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -19,11 +13,9 @@ public class Card {
     @Id
     @Column(name = "card_ref_id")
     private String cardRefId;
-    @Id
-    @Column(name = "user_key")
+    @Column(nullable = false)
     private String userKey;
-    @Id
-    @Column(name = "card_no")
+    @Column(nullable = false)
     private String cardNo;
 
     @Column(nullable = false)

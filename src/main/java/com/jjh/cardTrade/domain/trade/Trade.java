@@ -5,10 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Entity
 @NoArgsConstructor
 @Getter
@@ -26,8 +22,6 @@ public class Trade {
 
     @ManyToOne
     @JoinColumn(name = "card_ref_id")
-    @JoinColumn(name = "user_key")
-    @JoinColumn(name = "card_no")
     private Card card;
 
     public Trade(String tradeMoney, String tradeDate, Card card) {
@@ -36,7 +30,4 @@ public class Trade {
         this.card = card;
     }
 
-    //private String formatDate() {
-    //    return tradeDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-    //}
 }
